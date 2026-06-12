@@ -1,0 +1,53 @@
+{
+  "name": "claude-lanes",
+  "version": "0.1.0",
+  "description": "Per-window provider router for Claude Code — pin a model to each terminal lane. Team mode (leader/teammates on different providers), OpenAI protocol translation, zero daemon.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "c": "bin/c",
+    "claude-lanes": "bin/c"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "extras/",
+    "config.env.example",
+    "README.md",
+    "README.zh-CN.md"
+  ],
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "os": [
+    "darwin",
+    "linux"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hanzhangzzz/claude-lanes.git"
+  },
+  "homepage": "https://github.com/hanzhangzzz/claude-lanes#readme",
+  "bugs": {
+    "url": "https://github.com/hanzhangzzz/claude-lanes/issues"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "router",
+    "provider",
+    "proxy",
+    "anthropic",
+    "openai",
+    "model-switcher",
+    "agent-teams",
+    "glm",
+    "kimi",
+    "deepseek",
+    "vllm",
+    "cli"
+  ]
+}
