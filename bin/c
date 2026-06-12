@@ -457,11 +457,21 @@ start_team() {
         unset CLAUDE_CODE_EFFORT_LEVEL
     fi
 
-    # clear stale model overrides — the router owns model routing now
-    unset ANTHROPIC_SMALL_FAST_MODEL
-    unset ANTHROPIC_DEFAULT_SONNET_MODEL
-    unset ANTHROPIC_DEFAULT_OPUS_MODEL
-    unset ANTHROPIC_DEFAULT_HAIKU_MODEL
+    # Leader lane with an explicit MODEL: export the alias overrides so claude
+    # accepts a non-claude model name client-side. Teammates inherit these, but
+    # the router rewrites teammate model names anyway (ROUTER_TEAMMATE_MODEL).
+    # Without an explicit MODEL (claude-family providers), keep passthrough.
+    if [[ -n "$leader_model" ]]; then
+        export ANTHROPIC_SMALL_FAST_MODEL="$leader_model"
+        export ANTHROPIC_DEFAULT_SONNET_MODEL="$leader_model"
+        export ANTHROPIC_DEFAULT_OPUS_MODEL="$leader_model"
+        export ANTHROPIC_DEFAULT_HAIKU_MODEL="$leader_model"
+    else
+        unset ANTHROPIC_SMALL_FAST_MODEL
+        unset ANTHROPIC_DEFAULT_SONNET_MODEL
+        unset ANTHROPIC_DEFAULT_OPUS_MODEL
+        unset ANTHROPIC_DEFAULT_HAIKU_MODEL
+    fi
 
     export ANTHROPIC_BASE_URL="http://127.0.0.1:${ROUTER_ALLOCATED_PORT}"
     unset ANTHROPIC_AUTH_TOKEN
@@ -476,6 +486,9 @@ start_team() {
     local extra_args
     extra_args=$(read_global_field "CLAUDE_ARGS")
     local claude_args=(--settings "$C_SETTINGS" --teammate-mode tmux)
+    # the leader keeps its lane's model name — without this, claude inherits a
+    # model from global settings that the leader's provider may reject
+    [[ -n "$leader_model" ]] && claude_args+=(--model "$leader_model")
     [[ -n "$extra_args" ]] && claude_args+=($extra_args)
 
     # no exec here: a trap shuts the router down when claude exits

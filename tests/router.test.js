@@ -24,13 +24,14 @@ const upstream = http.createServer((req, res) => {
   req.on('end', () => {
     const body = Buffer.concat(chunks).toString('utf-8')
     seen.push({ url: req.url, headers: req.headers, body: body ? JSON.parse(body) : null })
+    const pathname = new URL(req.url, 'http://127.0.0.1').pathname
 
-    if (req.url === '/v1/messages') {
+    if (pathname === '/v1/messages') {
       // Anthropic-shaped upstream (team mode target)
       res.writeHead(200, { 'content-type': 'application/json' })
       return res.end(JSON.stringify({ type: 'message', role: 'assistant', content: [{ type: 'text', text: 'anthropic-upstream-ok' }] }))
     }
-    if (req.url === '/v1/chat/completions') {
+    if (pathname === '/v1/chat/completions') {
       const parsed = JSON.parse(body)
       if (parsed.stream) {
         res.writeHead(200, { 'content-type': 'text/event-stream' })
@@ -134,6 +135,29 @@ test('team: teammate-token routes to teammate with model override and real token
   assert.equal(upstreamReq.headers['anthropic-beta'], undefined)
   const body = await resp.json()
   assert.equal(body.content[0].text, 'anthropic-upstream-ok')
+})
+
+test('team: query strings on /v1/messages are accepted (claude sends ?beta=true)', async () => {
+  seen.length = 0
+  const resp = await fetch(`http://127.0.0.1:${TEAM_PORT}/v1/messages?beta=true`, {
+    method: 'POST',
+    headers: { authorization: 'Bearer teammate-token', 'content-type': 'application/json' },
+    body: JSON.stringify({ model: 'claude-sonnet', messages: [] }),
+  })
+  assert.equal(resp.status, 200)
+  const body = await resp.json()
+  assert.equal(body.content[0].text, 'anthropic-upstream-ok')
+})
+
+test('protocol: query strings on /v1/messages are accepted', async () => {
+  const resp = await fetch(`http://127.0.0.1:${PROTO_PORT}/v1/messages?beta=true`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ model: 'glm-5', messages: [{ role: 'user', content: 'hi' }] }),
+  })
+  assert.equal(resp.status, 200)
+  const body = await resp.json()
+  assert.equal(body.content[0].text, 'openai-upstream-ok')
 })
 
 test('team: leader-token routes to leader URL', async () => {

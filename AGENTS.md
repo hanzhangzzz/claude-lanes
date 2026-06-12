@@ -44,8 +44,27 @@ npm pack && npm install -g --prefix "$(mktemp -d)" ./claude-lanes-*.tgz
 
 改动 `lib/` 或 `bin/` 后必须跑 `npm test`；改安装相关逻辑后必须做 pack+install 验证。
 
+## 发布门禁（铁律：TDD 式发布验证）
+
+任何 `npm publish` 之前，必须按顺序通过以下门禁，**任何一关失败都不得发布**；
+先写好验证步骤再动手发布，验证不是发布后的补救：
+
+1. **测试全绿**：`npm test` 全部通过。
+2. **安装验证**：`npm pack` → 装入隔离 prefix（`npm install -g --prefix "$(mktemp -d)"`）
+   → 运行装出来的 `c`，确认 symlink 解析、首跑建配置模板、帮助输出正常。
+3. **真实使用验证**：用真实 provider 配置跑通至少：
+   - `c <n> -p "..."` 单 provider 非交互问答（Anthropic 直传协议）；
+   - 配置中存在 `PROTOCOL=openai` 的 lane 时，同样跑通该 lane（协议翻译链路）；
+   - `c team <a> <b> -p "..."`（team router 起、leader 路由、退出后 router 自动清理）。
+4. **发布后回验**：`npm publish` 后从 registry 真实安装一次
+   （`npm install -g claude-lanes@<version>` 到隔离 prefix）并重复第 3 关的最小用例。
+
+验证结果（命令 + 输出摘要）必须出现在发布说明或交付汇报里；无法完成第 3 关时
+标记为未验证，不得对外宣布可用。
+
 ## 发布
 
-1. `npm version <patch|minor>`
-2. `npm publish`
-3. 提交并推送版本变更
+1. 通过上面的发布门禁
+2. `npm version <patch|minor>`
+3. `npm publish`
+4. 提交并推送版本变更，创建 GitHub Release

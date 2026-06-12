@@ -82,6 +82,7 @@ CONFIG_0_AUTH_TOKEN=token-zero
 CONFIG_0_MODEL=model-zero
 CONFIG_2_BASE_URL=https://provider-two.example.com
 CONFIG_2_AUTH_TOKEN=token-two
+CONFIG_2_MODEL=model-two
 CONFIG_2_EFFORT=max
 CLAUDE_ARGS=--my-extra-arg
 `)
@@ -136,6 +137,11 @@ test('c team starts a router, injects team env, and cleans up on exit', () => {
   assert.equal(dump.env.CLAUDE_TEAM_ROLE, 'leader')
   assert.match(dump.env.CLAUDE_MODEL_LABEL, /^team\(/)
   assert.ok(dump.args.includes('--teammate-mode'))
+  // leader lane has MODEL=... → must be passed as --model AND exported as the
+  // model alias overrides; without both, claude rejects non-claude model names
+  // client-side before any request reaches the router
+  assert.deepEqual(dump.args.slice(dump.args.indexOf('--model'), dump.args.indexOf('--model') + 2), ['--model', 'model-two'])
+  assert.equal(dump.env.ANTHROPIC_DEFAULT_OPUS_MODEL, 'model-two')
   // claude (stub) exited → trap must have stopped the router
   assert.match(out, /team router stopped/)
   const pids = fs.readdirSync(path.join(stateDir, 'routers')).filter((f) => f.endsWith('.pid'))
