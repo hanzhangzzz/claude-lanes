@@ -1,45 +1,69 @@
-# awesome-claude-code 收录 PR 草案
+# awesome-claude-code 收录提交（Web 表单版）
 
-目标仓库：https://github.com/hesreallyhim/awesome-claude-code
+⚠️ 该仓库规则（2026-06 现行）：**禁止 PR、禁止 gh CLI 提交、必须由人类通过
+Web 表单提交**，绕过会被临时或永久封禁。流程：表单 → bot 自动校验 →
+维护者审核 → bot 自动建 PR 合入。
 
-## 操作步骤
+## 提交入口（人工打开，2 分钟填完）
 
-1. Fork 后查看该仓库 CONTRIBUTING.md —— 它有自己的提交流程（通常要求用
-   issue 表单或脚本生成条目，提 PR 前先核对最新要求）。
-2. 条目放在 Tooling / 第三方工具类目（以仓库当前分类名为准）。
+https://github.com/hesreallyhim/awesome-claude-code/issues/new?template=recommend-resource.yml
 
-## 条目文案（按 awesome 列表惯例：一句话，无营销词）
+## 各字段内容（直接粘贴）
 
-```markdown
-[claude-lanes](https://github.com/hanzhangzzz/claude-lanes) - Per-window provider router: pin each terminal's Claude Code to one provider (`c 0`, `c 1`), run agent-team leader and teammates on different providers (`c team 1 0`), translate to OpenAI-protocol upstreams. No daemon.
+**Display Name**
+```
+claude-lanes
 ```
 
-## PR 标题
+**Category**：`Tooling`
+**Sub-Category**：`Tooling: Config Managers`
 
+**Primary Link**
 ```
-Add claude-lanes (per-window provider router with team-mode split)
+https://github.com/hanzhangzzz/claude-lanes
 ```
 
-## PR 描述
-
-```markdown
-## What is it
-
-claude-lanes pins each terminal window's Claude Code process to one provider
-at launch time (`c 0` / `c 1` / ...), instead of routing dynamically. It also
-supports running an agent team's leader and teammates on different providers
-(`c team 1 0`), and translating to OpenAI-protocol upstreams (vLLM etc.) with
-full streaming tool-call support.
-
-## Why it's a useful addition
-
-Existing routers in the list focus on dynamic/auto routing. claude-lanes
-covers the opposite workflow — multiple parallel terminal sessions where each
-window must stay deterministically on its chosen model — and is, as far as I
-know, the only tool that splits leader/teammate traffic to different
-providers.
-
-- License: MIT
-- Install: `npm i -g claude-lanes`
-- Tests: 35 cases (unit + integration + e2e), zero runtime deps
+**Author Name**
 ```
+hanzhangzzz
+```
+
+**Author Link**
+```
+https://github.com/hanzhangzzz
+```
+
+**License**：`MIT`
+
+**Description**（1–3 句、无 emoji、描述性非推销性）
+```
+Per-window provider router that pins each terminal's Claude Code process to one provider at launch (`c 0`, `c 1`), instead of routing dynamically. Supports running an agent team's leader and teammates on different providers (`c team 1 0`), and translating to OpenAI-protocol upstreams with streaming tool-call support. No persistent daemon; per-session routers exit with the session.
+```
+
+**Validate Claims**（低摩擦验证路径）
+```
+npm i -g claude-lanes (zero runtime dependencies, Node >= 18). Run `c 0` once to generate ~/.config/claude-lanes/config.env, fill in any Anthropic-compatible provider (base URL + token), then run `c 0` again. The launch banner prints the pinned API/model, and `claude` starts against that provider. Networking: requests go only to the providers you configure; team/protocol modes start a localhost-only proxy (127.0.0.1) that exits with the session. No telemetry, no bypass-permissions (the tool passes no permission flags unless the user opts in via CLAUDE_ARGS in their own config).
+```
+
+**Specific Task(s)**
+```
+1. Pin two terminal windows to two different providers and confirm each window stays on its provider for the whole session.
+2. Run an agent team where the leader and the teammates use different providers, and verify the split in the router log.
+```
+
+**Specific Prompt(s)**
+```
+Window A: run `c 0`, then ask Claude Code: "which model are you? answer in one line" — the status banner above and the reply reflect provider 0.
+Window B: run `c 1` with a different provider and repeat — the two windows answer from different models simultaneously.
+Team split: configure two lanes, run `c team 1 0 -p "say hi"`, then check the router log at ~/.local/state/claude-lanes/routers/<port>.log — it shows LEADER requests routed to lane 1's host and TEAMMATE requests to lane 0's host.
+```
+
+**Additional Comments**（可选）
+```
+Demo GIF recorded against live providers: https://raw.githubusercontent.com/hanzhangzzz/claude-lanes/main/assets/demo.gif — shows the lanes list, a pinned real session, the OpenAI-protocol translation lane, and team mode with router lifecycle (ready -> stopped).
+```
+
+## 注意
+
+- 表单要求提交者是人类；用你自己的 GitHub 账号提交。
+- bot 校验失败会在 issue 下评论让你改格式，正常修改即可，不算违规。

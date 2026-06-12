@@ -1,11 +1,22 @@
-# Show HN 草案
+# Show HN 终稿（直接可发）
 
-## 标题（按推荐顺序，二选一后微调）
+## 提交字段
 
-1. `Show HN: Claude Lanes – run six Claude Code terminals, each pinned to a different model`
-2. `Show HN: I don't trust LLM auto-routing, so each of my terminal windows is pinned to one model`
+- **url**: `https://github.com/hanzhangzzz/claude-lanes`
+- **title**（75 字符，HN 上限 80）：
+
+```
+Show HN: Claude Lanes – pin each Claude Code terminal to a different model
+```
+
+备选（60 字符）：`Show HN: Pin each Claude Code terminal to a different model`
 
 标题规则：不出现 "revolutionary/best/powerful"，HN 只认具体画面。
+
+## 发布时机
+
+最佳窗口：北京时间 23:00–01:00（美西早 8–10 点）、周二至周四最优。
+周五早上可发（流量略低），周末不发。
 
 ## 正文
 
@@ -38,11 +49,11 @@ Two things turned out to need more than env vars:
 Zero runtime dependencies (Node built-ins only), macOS/Linux,
 `npm i -g claude-lanes`.
 
-GitHub: https://github.com/hanzhangzzz/claude-lanes
+（URL 提交时正文留空也可——HN 惯例是 URL 帖不带正文，把上面这段作为
+首条 founder comment 发出，效果更好。）
 
 ## 发帖注意
 
-- 周二至周四，美西早上 8–10 点（北京时间 23:00–01:00）提交。
 - 提交后第一时间在评论区补一条"我为什么做这个"的 founder comment，
   把 demo GIF 链接放进去（HN 正文不渲染图片）：
   `https://raw.githubusercontent.com/hanzhangzzz/claude-lanes/main/assets/demo.gif`
