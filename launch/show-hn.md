@@ -44,7 +44,8 @@ GitHub: https://github.com/hanzhangzzz/claude-lanes
 
 - 周二至周四，美西早上 8–10 点（北京时间 23:00–01:00）提交。
 - 提交后第一时间在评论区补一条"我为什么做这个"的 founder comment，
-  把 demo GIF 链接放进去（HN 正文不渲染图片）。
+  把 demo GIF 链接放进去（HN 正文不渲染图片）：
+  `https://raw.githubusercontent.com/hanzhangzzz/claude-lanes/main/assets/demo.gif`
 - 预答热门质疑（提前写好，别临场）：
   - "这不就是个 env var wrapper？" → 是，单 provider 模式就是，这是卖点；
     team 模式和协议翻译不是。

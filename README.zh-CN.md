@@ -16,6 +16,8 @@ iTerm 窗口 4   $ c team 1 0   → leader 用 Opus，所有 teammate 用 GLM-5
 每个终端窗口是一条**车道（lane）**，每条车道在进程整个生命周期内只跑一个
 provider。没有常驻 daemon、没有 JSON 配置、没有会半路偷换模型的自动路由。
 
+![claude-lanes demo](assets/demo.gif)
+
 ## 为什么
 
 如果你习惯并行开多个 Claude Code 窗口、一个窗口干一件事，你要的是**精确控制**：

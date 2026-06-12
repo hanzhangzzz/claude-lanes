@@ -19,7 +19,7 @@ switches your model mid-task.
 
 [中文文档 →](README.zh-CN.md)
 
-<!-- TODO: 30s demo GIF — five colored tabs, five models, one `c team` split -->
+![claude-lanes demo](assets/demo.gif)
 
 ## Why
 
