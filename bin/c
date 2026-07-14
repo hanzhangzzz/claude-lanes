@@ -83,6 +83,11 @@ show_help() {
     echo -e "  ${GREEN}c s${NC}                                         show config file"
     echo -e "  ${GREEN}c router status|stop${NC}                        manage local routers"
     echo ""
+    echo -e "Paths:"
+    echo -e "  ${BLUE}config  ${NC} $CONFIG_FILE"
+    echo -e "  ${BLUE}state   ${NC} $STATE_DIR"
+    echo -e "  ${BLUE}settings${NC} $C_SETTINGS"
+    echo ""
     echo "Configured lanes:"
 
     if [[ -f "$CONFIG_FILE" ]]; then
@@ -97,7 +102,6 @@ show_help() {
         done
     else
         echo -e "  ${YELLOW}no config yet — run any 'c <number>' to create a template${NC}"
-        echo -e "  ${YELLOW}config path: $CONFIG_FILE${NC}"
     fi
 
     echo ""
@@ -520,7 +524,9 @@ main() {
     if [[ "$cmd" == "s" || "$cmd" == "show" ]]; then
         check_config
         echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-        echo -e "${CYAN}  config: ${BLUE}$CONFIG_FILE${NC}"
+        echo -e "${CYAN}  config  : ${BLUE}$CONFIG_FILE${NC}"
+        echo -e "${CYAN}  state   : ${BLUE}$STATE_DIR${NC}"
+        echo -e "${CYAN}  settings: ${BLUE}$C_SETTINGS${NC}"
         echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
         echo ""
         cat "$CONFIG_FILE"
