@@ -122,6 +122,13 @@ a web UI, presets. If you want a smart always-on gateway, use it.
 - **`c router status`** / **`c router stop`** — inspect or kill local routers.
 - Per-lane options: `CONFIG_n_MODEL`, `CONFIG_n_EFFORT` (thinking effort),
   `CONFIG_n_COMPACT_WINDOW` (auto-compact threshold).
+- **Large-context lanes: append `[1m]` to the model name** (e.g.
+  `CONFIG_2_MODEL=glm-5.2[1m]`). Claude Code caps the effective auto-compact
+  threshold at `min(COMPACT_WINDOW, what it believes the model's max context
+  is)` — and for any model name it doesn't recognize, that belief defaults to
+  200000 tokens, silently ignoring a higher `COMPACT_WINDOW`. The `[1m]`
+  suffix makes Claude Code treat the model as 1M-context; it strips the suffix
+  from outgoing requests, so the upstream only ever sees the clean model name.
 
 ## Requirements
 
